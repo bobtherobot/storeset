@@ -1,13 +1,20 @@
 /*
+storeset
 
+Copyright(c) 2015 Michael Gieson
+www.gieson.com
 
+Documentation:
+https://github.com/bobtherobot/storeset
+
+MIT Licensed
 */
 
 var fs = require("fs");
 var path = require("path");
 
 // -----------------------------------------
-// Defaults
+// Configuration
 var defaultStoreFile = "store.json";
 var format = "\t"; // JSON "space" setting (to indent / make human readable)
 var addressSeparator = "."; // Prefer to use a "/" or maybe a ":" ?

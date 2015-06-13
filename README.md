@@ -2,16 +2,18 @@
 A simple way to store app settings and configs in your Node app. I thought this would be a quick find on nodejs, but everything was too basic, or too complicated... nothing in that "goldylocks" zone.
 
 ## Features
-- Data stored as simple, human readable JSON files.
+- No complicated setup
+- No database
+- No dependencies
+- Easy set / get
+- Data stored as human readable JSON files.
 - Automatically saves config on exit (or crash).
 - Automatically stores in CWD (current working directory).
 - Can have multiple, seperate store files.
 - Can specify store location.
 - Manually modify store files.
 - Pre-populate store files.
-- Easy set / get
-- Use "dot" notation for multi-dimentional objects/arrays.
-- No dependencies (other than build-in node's FileSystem and Path).
+- Use "dot" notation to set/get objects/arrays.
 
 ##Get it
 
@@ -42,22 +44,24 @@ var sees0 = store.get("sally.sees.0"); // Returns the first index of the array.
 
 
 ## Create (optional)
-By default things get set up automatically. However, you can configure storeset to use a specific store file and also configure the JSON formatting manually.
+By default things get set up automatically. However, you can specify store file and JSON formatting manually.
 
     store.create(file [, format]);
 
 
-    file    :   A filename or path to file. If using just a filename,
-                we'll automatically put it into CWD (current working directory).
-                Again, this create function is optional.
+        file    :   A filename or path to file. If using just a filename,
+                    we'll automatically put it into CWD (current working directory).
+                    Again, this create function is optional.
 
-    format  :   JSON formatting. Used for the JSON.stringify's "space" argument.
-                The default is "\t" to make the resulting JSOn human-readable.
-                You can use a number, such as 4 to use 4 spaces Or set to null
-                to remove formatting for a smaller store file size.
+        format  :   JSON formatting. Used for the JSON.stringify's "space" argument.
+                    The default is "\t" to make the resulting JSOn human-readable.
+                    You can use a number, such as 4 to use 4 spaces Or set to null
+                    to remove formatting for a smaller store file size.
 
-> NOTE: You may also use setFormat to configure the format later.
-> NOTE: There are a few configurable option variables within the storeset.js source file that you can adjust as well.
+######NOTES
+- You must call create() prior to calling get/set.
+- You may also use setFormat to configure the format later.
+- There are a few configurable option variables within the storeset.js source file that you can adjust as well. Simply open the storeset.js file (located in the node_modules folder) and see the "Configuration" section.
 
 
 ######Examples:
@@ -74,14 +78,12 @@ store.creaet("/system/path/to/store.json") // speifies the store file location
 
 
 ## Setting values
-The idea is not unlike object traversal. But we're using strings because we're not smart enough to use watch, plus watches may be resource hogs (plus they leave a stupid white band on your tan arm, and evetually get all smelly too).
+For simple items, just use simple name / value. For objects and arrays, use the classic "dot" notation that you're familiar with -- the only difference is that it'll be a string.
 
-NOTE:   Advanced users may want to configure the "addressSeparator" differently, but must do so manually in this file because it affects all stores.
+    store.set(name, value);
 
-    store.create(address, value);
-
-    address     : The address to store the information.
-    value       : String, Object, Array, Boolean, Number... basically anything that JSON can store.
+        name        : (string) The name or object.name to store the information.
+        value       : (mixed) Anything that JSON can store.
 
 ######Examples:
 ```js
@@ -96,24 +98,12 @@ store.set("deep.address.to.another", 42);
 ## Getting values
 Pretty straight forward, behaves like any other varible or object, including "undefined" if not present.
 
-    store.get([location, defaultValue])
+    store.get([name, defaultValue])
 
-	location        :  (optional) The path to the data you want
-    defaultValue    :   (optional) If the value doesn't exist, you can provide a
-                        default value to set. This is a shortcut for populating
-                        a location with a value if it doesn't exist.
-
-```js
-// The shortcut:
-var val = store.get("path", "something");
-
-// ... for:
-var val = store.get("path");
-if( ! val ){
-    // set() returns what you've just set.
-    val = store.set("path", "something");
-}
-```
+	   name            :   (optional) The name or object.path.name to the data you want
+       defaultValue    :   (optional) If the value doesn't exist, you can provide a
+                            default value to set. This is a shortcut for populating
+                            a location with a value if it doesn't exist.
 
 ######Examples (based on our "set" examples above):
 ```js
@@ -123,8 +113,17 @@ var sees = store.get("sally.sees"); // Returns array ["bob", "tom"]
 var sees0 = store.get("sally.sees.0"); // Returns array "bob"
 var something = store.get("deep.address.to.something"); // Returns 34
 var all = store.get() // When no args, the entire store is returned.
-```
 
+// The following:
+var val = store.get("path", "something");
+
+// ... is a shortcut for:
+var val = store.get("path");
+if( typeof val != "undefined" ){
+    // set() returns what you've just set.
+    val = store.set("path", "something");
+}
+```
 
 ## Getting all data
 Ways to get all the data:
@@ -146,12 +145,12 @@ Ways to get all the data:
 
 ######Examples
 ```js
- var storeData = store.getJSON(); // Returns JSON string using default formatting.
- var storeData = store.getJSON(true); // Returns JSON string using default formatting.
- var storeData = store.getJSON(false); // Returns minified JSON string (no formatting).
- var storeData = store.getJSON(null); // Returns minified JSON string (no formatting).
- var storeData = store.getJSON("\t"); // Returns JSON string using tabs for indents.
- var storeData = store.getJSON(4); // Returns JSON string using 4 spaces for indents.
+var storeData = store.getJSON(); // Returns JSON string using default formatting.
+var storeData = store.getJSON(true); // Returns JSON string using default formatting.
+var storeData = store.getJSON(false); // Returns minified JSON string (no formatting).
+var storeData = store.getJSON(null); // Returns minified JSON string (no formatting).
+var storeData = store.getJSON("\t"); // Returns JSON string using tabs for indents.
+var storeData = store.getJSON(4); // Returns JSON string using 4 spaces for indents.
 ```
 
 
@@ -163,7 +162,11 @@ Resetting and clearing the store will wipe all the data from the store
 
 
 ## Saving
-By default the data is saved when calling "set()". You can set the "saveOnSet" option to prevent this functionality (and perhaps minimize overhead for each "set" operation). But you'll have to do a save() manually to store the data.
+By default, the data is always saved when calling "set()".
+
+If the variable "saveOnSet" within storeset.js is set to FALSE, automatic save will NOT happen after each set() call, which may minimize overhead for each "set" operation.
+
+However you'll have to call save() manually in your app to store the data using:
 
     store.save();
 
@@ -173,12 +176,14 @@ By default the data is saved when calling "set()". You can set the "saveOnSet" o
 The store data can be human readable (or not).
 NOTE:   You may also set this up during creation, or modify the default options wihtin this file.
 
+```
     store.setFormat(format)
 
-    format : A tab or number. Same as javascript JSON.stringify's "space" argument.
-            - Using a "\t" will make the JSON human readable and indent with tabs.
-            - Using a number will set the number of spaces for each indent level.
-            - Using null (or undefined) will eliminate any formatting, thereby compacting the JSON data.
+        format : A tab or number. Same as javascript JSON.stringify's "space" argument.
+                - Using a "\t" will make the JSON human readable and indent with tabs.
+                - Using a number will set the number of spaces for each indent level.
+                - Using null (or undefined) will eliminate any formatting, thereby compacting the JSON data.
+```
 
 ######Examples
 ```js
@@ -194,5 +199,3 @@ store.setFormat()       // Un-humanize and compact JSON
 - https://github.com/yeoman/configstore
 - https://github.com/tomas/getset
 - https://github.com/kr1zmo/object-getset
-
-
