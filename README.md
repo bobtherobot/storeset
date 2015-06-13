@@ -195,9 +195,4 @@ store.setFormat()       // Un-humanize and compact JSON
 - https://github.com/tomas/getset
 - https://github.com/kr1zmo/object-getset
 
-## promote
-http://stackoverflow.com/questions/5869216/how-to-store-node-js-deployment-settings-configuration-files
 
-## keywords
-
-    store config settings simple
