@@ -1,5 +1,5 @@
 ## Overview
-A simple way to store app settings and configs. I thought this would be a quick find on nodejs, but everything was too basic, or too complicated... nothing in that "goldylocks" zone.
+A simple way to store app settings and configs in your Node app. I thought this would be a quick find on nodejs, but everything was too basic, or too complicated... nothing in that "goldylocks" zone.
 
 ## Features
 - Data stored as simple, human readable JSON files.
