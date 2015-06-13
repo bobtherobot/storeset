@@ -23,7 +23,7 @@ A simple way to store app settings and configs in your Node app. I thought this 
 ```js
 
 // 30 second setup.
-var store = require("./storeset");
+var store = require("storeset");
 
 // Works "out of the box" without any setup...
 // - Automatically save data to "store.json" in the CWD.
