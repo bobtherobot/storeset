@@ -1,0 +1,46 @@
+{
+	"name": "storeset",
+	"version": "0.1.0",
+	"description": "A simple way to store app settings.",
+	"author": {
+		"name": "Michael Gieson",
+		"email": "mgieson@plaino.com",
+		"url": "gieson.com"
+	},
+	"license": "MIT",
+	"keywords": [
+		"store",
+		"config",
+		"configs",
+		"settings",
+		"simple",
+		"json",
+		"getset",
+		"preferences",
+		"prefs",
+		"user",
+		"database",
+		"db"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/storeset/storeset.git"
+	},
+	"main": "./storeset.js",
+	"engines": {
+		"node": ">= 0.6"
+	},
+	"dependencies": {
+	},
+	"homepage": "https://gieson.com/projects/storeset",
+	"_npmUser": {
+		"name": "mgieson",
+		"email": "mgieson@plaino.com"
+	},
+	"_npmVersion": "2.9.0",
+	"_nodeVersion": "1.5.1",
+	"maintainers": [{
+		"name": "mikegieson",
+		"email": "mgieson@plaino.com"
+	}]
+}
