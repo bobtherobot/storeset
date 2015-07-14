@@ -20,7 +20,7 @@ var format = "\t"; // JSON "space" setting (to indent / make human readable)
 var addressSeparator = "."; // Prefer to use a "/" or maybe a ":" ?
 var defaultData = {}; // Put any common stuff in here so all newly created stores will have the same data.
 var saveOnSet = true; // When FALSE, you'll have to manually call save() to write the data to file.
-var saveOnExit = false; // TRUE = Will save before exit or crash.
+var saveOnExit = false; // Defaults to false. TRUE = Will save before exit or crash.
 
 
 // -----------------------------------------
@@ -133,28 +133,31 @@ function save(){
 	}
 }
 
+
 // --------------------
 // Exit Hooks
 // --------------------
-// Save before exit... just in case of crash or early termination.
-var exitCalled = false;
-function exit(sigvar, signal) {
-	if (exitCalled) {
-		return;
-	}
+// Save before exit... or crash or early termination.
+if(saveOnExit){
+	var exitCalled = false;
+	function exit(sigvar, signal) {
+		if (exitCalled) {
+			return;
+		}
 
-	exitCalled = true;
+		exitCalled = true;
 
-	save();
+		save();
 
-	if (sigvar === true) {
-		process.exit(128 + signal);
-	}
-};
+		if (sigvar === true) {
+			process.exit(128 + signal);
+		}
+	};
 
-process.once('exit', exit);
-process.once('SIGINT', exit.bind(null, true, 2));
-process.once('SIGTERM', exit.bind(null, true, 15));
+	process.once('exit', exit);
+	process.once('SIGINT', exit.bind(null, true, 2));
+	process.once('SIGTERM', exit.bind(null, true, 15));
+}
 
 // --------------------
 
