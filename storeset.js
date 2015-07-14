@@ -152,7 +152,7 @@ if(saveOnExit){
 		if (sigvar === true) {
 			process.exit(128 + signal);
 		}
-	};
+	}
 
 	process.once('exit', exit);
 	process.once('SIGINT', exit.bind(null, true, 2));
