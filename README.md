@@ -7,7 +7,6 @@ A simple way to store app settings and configs in your Node app. I thought this 
 - No dependencies
 - Easy set / get
 - Data stored as human readable JSON files.
-- Automatically saves config on exit (or crash).
 - Automatically stores in CWD (current working directory).
 - Can have multiple, seperate store files.
 - Can specify store location.
@@ -15,9 +14,12 @@ A simple way to store app settings and configs in your Node app. I thought this 
 - Pre-populate store files.
 - Use "dot" notation to set/get objects/arrays.
 
+
+
 ##Get it
 
     npm install storeset
+
 
 
 ##Use it
@@ -53,15 +55,19 @@ By default things get set up automatically. However, you can specify store file 
                     we'll automatically put it into CWD (current working directory).
                     Again, this create function is optional.
 
-        format  :   JSON formatting. Used for the JSON.stringify's "space" argument.
+        format  :   (optiona) JSON formatting. Used for the JSON.stringify's "space" argument.
                     The default is "\t" to make the resulting JSOn human-readable.
                     You can use a number, such as 4 to use 4 spaces Or set to null
                     to remove formatting for a smaller store file size.
+
+
 
 ######NOTES
 - You must call create() prior to calling get/set.
 - You may also use setFormat to configure the format later.
 - There are a few configurable option variables within the storeset.js source file that you can adjust as well. Simply open the storeset.js file (located in the node_modules folder) and see the "Configuration" section.
+
+
 
 
 ######Examples:
@@ -73,7 +79,7 @@ store.create();                   // Sets everything up using defauls.
                                   //    May make the first "set" faster as it will
                                   //    do preliminary setup
 store.create(null, 4);            // Does a defualt set up, and sets the format option.
-store.creaet("/system/path/to/store.json") // speifies the store file location
+store.create("/system/path/to/store.json") // speifies the store file location
 ```
 
 
@@ -170,6 +176,7 @@ However you'll have to call save() manually in your app to store the data using:
 
     store.save();
 
+There is also an additional configuration variable named "saveOnExit", which will save changes when the app closes. Note: saveOnExit is set to FALSE by default. To enable it you'll ahve to manually modify the storeset.js file.
 
 
 ## JSON Formatting

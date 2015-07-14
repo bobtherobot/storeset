@@ -20,7 +20,7 @@ var format = "\t"; // JSON "space" setting (to indent / make human readable)
 var addressSeparator = "."; // Prefer to use a "/" or maybe a ":" ?
 var defaultData = {}; // Put any common stuff in here so all newly created stores will have the same data.
 var saveOnSet = true; // When FALSE, you'll have to manually call save() to write the data to file.
-
+var saveOnExit = false; // TRUE = Will save before exit or crash.
 
 
 // -----------------------------------------
