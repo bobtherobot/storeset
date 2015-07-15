@@ -283,7 +283,7 @@ var get = function ( key, defaultValue ) {
 	var val;
 
 	// Check if it exists
-	if(seg[last]){
+	if(seg && seg[last]){
 		val = clone( seg[last] );
 
 	// Set the default value if using this option.
