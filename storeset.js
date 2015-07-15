@@ -44,7 +44,7 @@ function clone(obj) {
 	}
 
 	// Handle Array
-	if (obj instanceof Array) {
+	if ( Array.isArray(obj) ) {
 		copy = [];
 		for (var i = 0, len = obj.length; i < len; i++) {
 			copy[i] = clone( obj[i] );
@@ -53,7 +53,7 @@ function clone(obj) {
 	}
 
 	// Handle Object
-	if (obj instanceof Object) {
+	if (typeof obj == "object") {
 		copy = {};
 		for (var attr in obj) {
 			if ( obj.hasOwnProperty(attr) ) {
