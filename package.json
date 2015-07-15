@@ -1,6 +1,6 @@
 {
 	"name": "storeset",
-	"version": "0.1.9",
+	"version": "0.1.10",
 	"description": "A simple way to store app settings.",
 	"author": {
 		"name": "Michael Gieson",

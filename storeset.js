@@ -33,13 +33,14 @@ var didSetup = false;
 function clone(obj) {
 	var copy;
 
+	var type = typeof obj;
 	// Handle the 3 simple types, and null or undefined
-	if (obj === null  || typeof obj != "object") {
+	if (obj === null  || type != "object") {
 		return obj;
 	}
 
 	// Handle Date
-	if (obj instanceof Date) {
+	if (type == "date") {
 		return obj.getTime();
 	}
 
@@ -53,7 +54,7 @@ function clone(obj) {
 	}
 
 	// Handle Object
-	if (typeof obj == "object") {
+	if (type == "object") {
 		copy = {};
 		for (var attr in obj) {
 			if ( obj.hasOwnProperty(attr) ) {
@@ -206,6 +207,8 @@ var set = function ( key, value ) {
 			// ... so when we get to the "year" segKey the interpreter will attempt to read:
 			// ...      2002[year]
 			// ... and then all heck breaks out and the new value will not stick.
+			//
+			// NOTE: typeof null == "object", so we must check !segData
 			if( ! segData || typeof segData != "object"){
 				segData = seg[ segKey ] = {};
 			}
