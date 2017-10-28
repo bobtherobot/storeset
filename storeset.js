@@ -74,13 +74,17 @@ function create(filename, formatChar){
 	dataFileName = filename || defaultStoreFile;
 
 	// See if we've spcified a path.
-	if(filename.indexOf("/") ){
-		dataFilePath = filename;
+	if( ~dataFileName.indexOf(path.sep) ){
+		dataFilePath = dataFileName;
 
 	// Otherwise, use CWD
 	} else {
+		//dataFilePath = path.resolve(__dirname, dataFileName);
 		dataFilePath = path.resolve(process.cwd(), dataFileName);
 	}
+
+
+
 
 	// Assume we need to make the file
 	var makeFile = true;
@@ -169,6 +173,7 @@ var set = function ( key, value ) {
 	}
 
 	// We must check that we're setup! Otherwise the new value will not make it in.
+	
 	if( ! didSetup ){
 		create(defaultStoreFile);
 	}
