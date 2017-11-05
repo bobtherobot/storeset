@@ -222,6 +222,6 @@ store.setFormat()       // Un-humanize and compact JSON
 
 ## Change Log
 
-v0.1.10  - 2015-07-14 initial commit
-v0.1.12  - 2017-11-05 auto save fix
+- v0.1.10  - 2015-07-14 initial commit
+- v0.1.12  - 2017-11-05 auto save fix
 
