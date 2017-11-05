@@ -16,25 +16,25 @@ A simple way to store app settings and configs in your Node app. I thought this 
 
 
 
-##Get it
+## Get it
 
-    npm install storeset
+    npm install storeset --save
 
 
 
-##Use it
+## Use it
 
 ```js
 
 // 30 second setup.
 var store = require("storeset");
 
-// Works "out of the box" without any setup...
-// - Automatically save data to "store.json" in the CWD.
-// - You may also do a manual setup. See the "Create" section below.
+// Works "out of the box" without any setup --
+// data automatically saved to "store.json" in the CWD.
 
 // Setting values
 store.set("sunny", true);
+
 // Use dot notation for multi-dimensional objects and arrays
 store.set("sally.sees", ["bob", "tom"]);
 
@@ -46,31 +46,43 @@ var sees0 = store.get("sally.sees.0"); // Returns the first index of the array.
 
 
 ## Create (optional)
-By default things get set up automatically. However, you can specify store file and JSON formatting manually.
+By default data is store in the CWD (current working directory) via:
+
+    var dataFilePath = path.resolve(process.cwd(), dataFileName);
+
+Specify a different location for the store file and JSON formatting manually.
 
     store.create(file [, format]);
 
+> Arguments
+>
+>         file    :   A filename or path to file. If using just a filename,
+>                     we'll automatically put it into CWD (current working directory).
+>                     Again, this create function is optional.
+>
+>         format  :   [optiona] JSON formatting. Used for the JSON.stringify's "space" argument.
+>                     The default is "\t" to make the resulting JSOn human-readable.
+>                     You can use a number, such as 4 to use 4 spaces Or set to null
+>                     to remove formatting for a smaller store file size.
+>
+>
+> Example:
+>
+> 	store.create(path.resolve(__dirname, dataFileName))
+>
 
-        file    :   A filename or path to file. If using just a filename,
-                    we'll automatically put it into CWD (current working directory).
-                    Again, this create function is optional.
-
-        format  :   (optiona) JSON formatting. Used for the JSON.stringify's "space" argument.
-                    The default is "\t" to make the resulting JSOn human-readable.
-                    You can use a number, such as 4 to use 4 spaces Or set to null
-                    to remove formatting for a smaller store file size.
 
 
-
-######NOTES
+###### Notes
 - You must call create() prior to calling get/set.
-- You may also use setFormat to configure the format later.
+- Use setFormat to configure the format independent of create.
 - There are a few configurable option variables within the storeset.js source file that you can adjust as well. Simply open the storeset.js file (located in the node_modules folder) and see the "Configuration" section.
+- Only one "store" can exist at one time. Calling store.create() multiple times will screw things up. Instead, just set to different keys. e.g. store.set("part1", data1), store.set("part2", data2);
 
 
 
+###### Examples:
 
-######Examples:
 ```js
 store.create("store.json", null); // Produces non-formatted store file
 store.create("store.json", 4);    // Formats human readable store file using 4 spaces
@@ -91,7 +103,7 @@ For simple items, just use simple name / value. For objects and arrays, use the 
         name        : (string) The name or object.name to store the information.
         value       : (mixed) Anything that JSON can store.
 
-######Examples:
+###### Examples:
 ```js
 store.set("sunny", false);
 store.set("bob", {age:28, size:"large", glasses:true});
@@ -111,7 +123,8 @@ Pretty straight forward, behaves like any other varible or object, including "un
                             default value to set. This is a shortcut for populating
                             a location with a value if it doesn't exist.
 
-######Examples (based on our "set" examples above):
+###### Examples (based on our "set" examples above):
+
 ```js
 var bob = store.get("bob"); // Returns object
 var sally = store.get("sally"); // Returns object {sees : ["bob", "tom"] }
@@ -149,7 +162,7 @@ Ways to get all the data:
             Number      :   Number of spaces to use for indent (e.g. 2)
 ```
 
-######Examples
+###### Examples
 ```js
 var storeData = store.getJSON(); // Returns JSON string using default formatting.
 var storeData = store.getJSON(true); // Returns JSON string using default formatting.
@@ -192,7 +205,7 @@ NOTE:   You may also set this up during creation, or modify the default options 
                 - Using null (or undefined) will eliminate any formatting, thereby compacting the JSON data.
 ```
 
-######Examples
+###### Examples
 ```js
 store.setFormat("\t")   // Humanize with tab indents
 store.setFormat(2)      // Humanize where each indent is 2 spaces
@@ -206,3 +219,9 @@ store.setFormat()       // Un-humanize and compact JSON
 - https://github.com/yeoman/configstore
 - https://github.com/tomas/getset
 - https://github.com/kr1zmo/object-getset
+
+## Change Log
+
+v0.1.10  - 2015-07-14 initial commit
+v0.1.12  - 2017-11-05 auto save fix
+
