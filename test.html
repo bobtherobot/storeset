@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>storeset example / test</title>
+	
+	<script src="storeset.js"></script>
+
+<script>
+
+var store = storeset; // just make it easier to type */
+var ouptutElem;
+function init(){
+
+	ouptutElem = document.getElementById("output");
+
+	var bobVal = store.get("bob");
+	if( bobVal ){
+
+		bobVal++;
+
+		print("bump bob: " + store.set("bob", bobVal) + ". Now refresh your browser.", true);
+
+	} else {
+
+		print("bob is now: " + store.set("bob", 1) + ". Now refresh your browser.");
+		store.save();
+		
+	}
+
+	console.log( store.getJSON() );
+
+}
+
+function print(str, append){
+	ouptutElem.innerHTML = append ? ouptutElem.innerHTML + "\n" + str : str;
+}
+
+function setValue(){
+	var key = document.getElementById("key").value;
+	var val = document.getElementById("val").value;
+	store.set(key, val);
+	store.save();
+	print("stored: " + store.getJSON() );
+}
+
+function clearStore(){
+	console.log("clearStore");
+	store.clear();
+	print("store cleared: " + store.getJSON() );
+}
+
+function showStore(){
+	console.log("showStore");
+	print("store: " + store.getJSON() );
+}
+
+document.addEventListener("DOMContentLoaded", init);
+
+</script>
+
+
+</head>
+<body>
+	<button onclick="showStore()">Show Store</button>
+	<button onclick="clearStore()">Clear Store</button>
+	<input id="key" type="text" value="food" placeholder="type key" />
+	<input id="val" type="text" value="pho" placeholder="type value" />
+	<button onclick="setValue()">Set New Field</button>
+
+<pre id="output"></pre>
+
+</body>
+</html>

@@ -1,19 +1,20 @@
 ## Overview
-A simple way to store app settings and configs in your Node app. I thought this would be a quick find on nodejs, but everything was too basic, or too complicated... nothing in that "goldylocks" zone.
+A simple way to store app settings and configs. I thought this would be a quick find on nodejs, but everything was too basic, or too complicated... nothing in that "goldylocks" zone.
+
+Works in Node (stores to a simple text file as JSON) and in browsers (store to [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)).
 
 ## Features
+
 - No complicated setup
 - No database
 - No dependencies
 - Easy set / get
-- Data stored as human readable JSON files.
-- Automatically stores in CWD (current working directory).
-- Can have multiple, seperate store files.
-- Can specify store location.
-- Manually modify store files.
-- Pre-populate store files.
-- Use "dot" notation to set/get objects/arrays.
-
+- Data stored as JSON.
+- Automatically stores in CWD (current working directory) (Node) or to localStorage (browser)
+- Manually modify store files (Node)
+- Pre-populate store files (Node)
+- Use "dot" notation to set/get objects/arrays -- or operate directly on the data object.
+- Use in browser (for browsers that support localStorage)
 
 
 ## Get it
@@ -21,28 +22,34 @@ A simple way to store app settings and configs in your Node app. I thought this 
     npm install storeset --save
 
 
-
 ## Use it
 
-```js
+	// 30 second setup.
+	var store = require("storeset");
 
-// 30 second setup.
-var store = require("storeset");
+	// Works "out of the box" without any setup --
+	// data automatically saved to "store.json" in the CWD.
 
-// Works "out of the box" without any setup --
-// data automatically saved to "store.json" in the CWD.
+	// Setting values
+	store.set("sunny", true);
 
-// Setting values
-store.set("sunny", true);
+	// Use dot notation for multi-dimensional objects and arrays
+	store.set("sally.sees", ["bob", "tom"]);
 
-// Use dot notation for multi-dimensional objects and arrays
-store.set("sally.sees", ["bob", "tom"]);
+	// Getting values:
+	var sunny = store.get("sunny"); // Returns TRUE
+	var sees0 = store.get("sally.sees.0"); // Returns the first index of the array.
 
-// Getting values:
-var sunny = store.get("sunny"); // Returns TRUE
-var sees0 = store.get("sally.sees.0"); // Returns the first index of the array.
+	// Operate directly on the storage object
+	var storeData = store.getDataObject();
+	storeData.bob = "hello";
 
-```
+	// Access either way:
+	var seeBob = store.get("bob"); 	// "hello" - These two are identical
+	var seeBob = storeData.bob; 	// "hello" - These two are identical
+
+	store.save(); // save it to disk (or localStorage for browser).
+
 
 
 ## Create (optional)

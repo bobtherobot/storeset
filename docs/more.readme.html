@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		
+    	<title>README</title>
+		<meta name="description" content="more.readme">
+
+		 <!-- Normalize -->
+	    <link rel="stylesheet" href="assets/vendor/normalize.css">
+
+	    
+	    <!-- prettify -->
+	    <link rel="stylesheet" href="assets/vendor/prettify/codamike.css">
+	    
+		<script src="assets/vendor/prettify/prettify.js"></script>
+
+		<!-- Documon Pages Info. (Used by various classes to identify this page.) -->
+		<script>
+	    var pageCtx = {
+	    	id : "more.readme",
+	    	name: "README"
+	    }
+	    </script>
+
+	    <!-- theme 
+	    <link rel="stylesheet" href="assets/fonts/Fira_Sans/FiraSans.css">
+	    <link rel="stylesheet" href="assets/fonts/Inconsolata/inconsolata.css">
+	    -->
+	    <link rel="stylesheet" href="assets/css/pages.css">
+	    <script src="assets/js/documon/Storage.js"></script>
+	    <script src="assets/js/documon/Access.js"></script>
+	    <script src="assets/js/documon/Pages.js"></script>
+
+	    
+	    
+
+	</head>
+
+
+
+	<body>
+
+		<div class="page">
+			<div class="more"><h2>Overview</h2>
+
+<p>A simple way to store app settings and configs. I thought this would be a quick find on nodejs, but everything was too basic, or too complicated... nothing in that "goldylocks" zone.</p>
+
+<p>Works in Node (stores to a simple text file as JSON) and in browsers (store to <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage</a>).</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>No complicated setup</li>
+<li>No database</li>
+<li>No dependencies</li>
+<li>Easy set / get</li>
+<li>Data stored as JSON.</li>
+<li>Automatically stores in CWD (current working directory) (Node) or to localStorage (browser)</li>
+<li>Manually modify store files (Node)</li>
+<li>Pre-populate store files (Node)</li>
+<li>Use "dot" notation to set/get objects/arrays -- or operate directly on the data object.</li>
+<li>Use in browser (for browsers that support localStorage)</li>
+</ul>
+
+<h2>Get it</h2>
+
+<pre>npm install storeset --save</pre>
+
+<h2>Use it</h2>
+
+<pre>// 30 second setup.
+var store = require("storeset");
+
+// Works "out of the box" without any setup --
+// data automatically saved to "store.json" in the CWD.
+
+// Setting values
+store.set("sunny", true);
+
+// Use dot notation for multi-dimensional objects and arrays
+store.set("sally.sees", ["bob", "tom"]);
+
+// Getting values:
+var sunny = store.get("sunny"); // Returns TRUE
+var sees0 = store.get("sally.sees.0"); // Returns the first index of the array.
+
+// Operate directly on the storage object
+var storeData = store.getDataObject();
+storeData.bob = "hello";
+
+// Access either way:
+var seeBob = store.get("bob");  // "hello" - These two are identical
+var seeBob = storeData.bob;     // "hello" - These two are identical
+
+store.save(); // save it to disk (or localStorage for browser).</pre>
+
+<h2>Create (optional)</h2>
+
+<p>By default data is store in the CWD (current working directory) via:</p>
+
+<pre>var dataFilePath = path.resolve(process.cwd(), dataFileName);</pre>
+
+<p>Specify a different location for the store file and JSON formatting manually.</p>
+
+<pre>store.create(file [, format]);</pre>
+
+<blockquote>
+  <p>Arguments</p>
+
+<pre>    file    :   A filename or path to file. If using just a filename,
+                we'll automatically put it into CWD (current working directory).
+                Again, this create function is optional.
+
+    format  :   [optiona] JSON formatting. Used for the JSON.stringify's "space" argument.
+                The default is "\t" to make the resulting JSOn human-readable.
+                You can use a number, such as 4 to use 4 spaces Or set to null
+                to remove formatting for a smaller store file size.</pre>
+  
+  <p>Example:</p>
+  
+  <p>store.create(path.resolve(__dirname, dataFileName))</p>
+</blockquote>
+
+<h6>Notes</h6>
+
+<ul>
+<li>You must call create() prior to calling get/set.</li>
+<li>Use setFormat to configure the format independent of create.</li>
+<li>There are a few configurable option variables within the storeset.js source file that you can adjust as well. Simply open the storeset.js file (located in the node_modules folder) and see the "Configuration" section.</li>
+<li>Only one "store" can exist at one time. Calling store.create() multiple times will screw things up. Instead, just set to different keys. e.g. store.set("part1", data1), store.set("part2", data2);</li>
+</ul>
+
+<h6>Examples:</h6>
+
+<pre class="prettyprint"><code class="language-js">store.create("store.json", null); // Produces non-formatted store file
+store.create("store.json", 4);    // Formats human readable store file using 4 spaces
+store.create("store.json");       // Defaults human readable store file using tabs
+store.create();                   // Sets everything up using defauls.
+                                  //    May make the first "set" faster as it will
+                                  //    do preliminary setup
+store.create(null, 4);            // Does a defualt set up, and sets the format option.
+store.create("/system/path/to/store.json") // speifies the store file location</code></pre>
+
+<h2>Setting values</h2>
+
+<p>For simple items, just use simple name / value. For objects and arrays, use the classic "dot" notation that you're familiar with -- the only difference is that it'll be a string.</p>
+
+<pre>store.set(name, value);
+
+    name        : (string) The name or object.name to store the information.
+    value       : (mixed) Anything that JSON can store.</pre>
+
+<h6>Examples:</h6>
+
+<pre class="prettyprint"><code class="language-js">store.set("sunny", false);
+store.set("bob", {age:28, size:"large", glasses:true});
+store.set("sally.sees", ["bob", "tom"]);
+store.set("deep.address.to.something", 34);
+store.set("deep.address.to.another", 42);</code></pre>
+
+<h2>Getting values</h2>
+
+<p>Pretty straight forward, behaves like any other varible or object, including "undefined" if not present.</p>
+
+<pre>store.get([name, defaultValue])
+
+   name            :   (optional) The name or object.path.name to the data you want
+   defaultValue    :   (optional) If the value doesn't exist, you can provide a
+                        default value to set. This is a shortcut for populating
+                        a location with a value if it doesn't exist.</pre>
+
+<h6>Examples (based on our "set" examples above):</h6>
+
+<pre class="prettyprint"><code class="language-js">var bob = store.get("bob"); // Returns object
+var sally = store.get("sally"); // Returns object {sees : ["bob", "tom"] }
+var sees = store.get("sally.sees"); // Returns array ["bob", "tom"]
+var sees0 = store.get("sally.sees.0"); // Returns array "bob"
+var something = store.get("deep.address.to.something"); // Returns 34
+var all = store.get() // When no args, the entire store is returned.
+
+// The following:
+var val = store.get("path", "something");
+
+// ... is a shortcut for:
+var val = store.get("path");
+if( typeof val != "undefined" ){
+    // set() returns what you've just set.
+    val = store.set("path", "something");
+}</code></pre>
+
+<h2>Getting all data</h2>
+
+<p>Ways to get all the data: <br>
+1. As a javascript object. Use the standard "get" without any arguments returns a javascript object.</p>
+
+<pre class="prettyprint"><code class="language-js">    var storeData = store.get(); // returns a javascript object</code></pre>
+
+<ol>
+<li>As a JSON string</li>
+</ol>
+
+<pre class="prettyprint"><code>    store.getJSON(format);
+
+    format  : (optional) mixed. See also "setFormat()" and "JSON Formatting"
+            undefined   :   e.g. not set, returns the default, same as TRUE.
+            TRUE        :   Formatted according to the formatting established.
+            FALSE | null:   Collapse and remove formatting.
+            String      :   Apply specific formatting (e.g. "\t")
+            Number      :   Number of spaces to use for indent (e.g. 2)</code></pre>
+
+<h6>Examples</h6>
+
+<pre class="prettyprint"><code class="language-js">var storeData = store.getJSON(); // Returns JSON string using default formatting.
+var storeData = store.getJSON(true); // Returns JSON string using default formatting.
+var storeData = store.getJSON(false); // Returns minified JSON string (no formatting).
+var storeData = store.getJSON(null); // Returns minified JSON string (no formatting).
+var storeData = store.getJSON("\t"); // Returns JSON string using tabs for indents.
+var storeData = store.getJSON(4); // Returns JSON string using 4 spaces for indents.</code></pre>
+
+<h2>Clearing</h2>
+
+<p>Resetting and clearing the store will wipe all the data from the store</p>
+
+<pre>store.clear();</pre>
+
+<h2>Saving</h2>
+
+<p>By default, the data is always saved when calling "set()".</p>
+
+<p>If the variable "saveOnSet" within storeset.js is set to FALSE, automatic save will NOT happen after each set() call, which may minimize overhead for each "set" operation.</p>
+
+<p>However you'll have to call save() manually in your app to store the data using:</p>
+
+<pre>store.save();</pre>
+
+<p>There is also an additional configuration variable named "saveOnExit", which will save changes when the app closes. Note: saveOnExit is set to FALSE by default. To enable it you'll ahve to manually modify the storeset.js file.</p>
+
+<h2>JSON Formatting</h2>
+
+<p>The store data can be human readable (or not). <br>
+NOTE:   You may also set this up during creation, or modify the default options wihtin this file.</p>
+
+<pre class="prettyprint"><code>    store.setFormat(format)
+
+        format : A tab or number. Same as javascript JSON.stringify's "space" argument.
+                - Using a "\t" will make the JSON human readable and indent with tabs.
+                - Using a number will set the number of spaces for each indent level.
+                - Using null (or undefined) will eliminate any formatting, thereby compacting the JSON data.</code></pre>
+
+<h6>Examples</h6>
+
+<pre class="prettyprint"><code class="language-js">store.setFormat("\t")   // Humanize with tab indents
+store.setFormat(2)      // Humanize where each indent is 2 spaces
+store.setFormat()       // Un-humanize and compact JSON</code></pre>
+
+<h2>Similar projects</h2>
+
+<ul>
+<li><a href="https://www.npmjs.com/package/config">https://www.npmjs.com/package/config</a></li>
+<li><a href="https://www.npmjs.com/package/nconf">https://www.npmjs.com/package/nconf</a></li>
+<li><a href="https://github.com/Pencroff/kea-config">https://github.com/Pencroff/kea-config</a></li>
+<li><a href="https://github.com/yeoman/configstore">https://github.com/yeoman/configstore</a></li>
+<li><a href="https://github.com/tomas/getset">https://github.com/tomas/getset</a></li>
+<li><a href="https://github.com/kr1zmo/object-getset">https://github.com/kr1zmo/object-getset</a></li>
+</ul>
+
+<h2>Change Log</h2>
+
+<ul>
+<li>v0.1.10  - 2015-07-14 initial commit</li>
+<li>v0.1.12  - 2017-11-05 auto save fix</li>
+</ul></div>
+		</div>
+
+		<div class="footer">Generated by <a href="http://www.documon.net" target="_blank">Documon</a></div>
+
+	</body>
+
+
+</html>
